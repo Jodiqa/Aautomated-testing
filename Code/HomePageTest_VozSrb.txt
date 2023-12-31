@@ -1,0 +1,46 @@
+public class HomePageTest_VozSrb extends BaseTest_VozSrb {
+
+	@BeforeTest
+	public void navigacija() {
+		driver.navigate().to("https://webapi1.srbvoz.rs/ekarta/app/#!/home");
+	}
+
+	@Test(priority = 1)
+	public void stanicaOD() {
+		homePage.pickPolaznuStanicu("be", "Beograd Centar");
+	}
+
+	@Test(priority = 2)
+	public void stanicaDo() {
+		homePage.pickDoStanicu("no", "Novi Sad");
+	}
+
+	@Test(priority = 3)
+	public void aktivanDatum() {
+		homePage.clickNaAktivanDatum();
+	}
+
+	@Test(priority = 4)
+	public void dugmeTrazi() {
+		homePage.clickButtonTrazi();
+	}
+
+	@Test(priority = 5)
+	public void dugmeIzaberi() {
+		homePage.clickButtonIzaberi();
+	}
+
+	@Test(priority = 6)
+	public void dugmeDalje() {
+		homePage.clickButtonDalje();
+	}
+
+	@Test(priority = 7)
+	public void verifikacijaBrojPutnika() {
+		assertTrue(homePage.brojPutnikaVerifikacija().contains("Broj putnika:"));
+	}
+	@Test(priority = 8)
+	public void verifikaciijaDva() {
+		assertEquals(homePage.brojPutnikaVerifikacija(), "Broj putnika: 1");
+	}
+}

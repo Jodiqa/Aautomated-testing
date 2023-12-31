@@ -1,0 +1,121 @@
+public class LoginPageClass_VozSrb {
+	WebDriver driver;
+	WebDriverWait wait;
+
+	// elementi
+	@FindBy(id = "firstName")
+	WebElement inputFieldFirstname;
+
+	@FindBy(id = "lastName")
+	WebElement inputFieldLastName;
+
+	// CSS Selector Reference
+	// ng-model mi je najsigurniji
+	@FindBy(css = "[ng-model=\"date\"]")
+	WebElement dayDatumRodjena;
+
+	@FindBy(css = "[ng-model=\"month\"]")
+	WebElement monthDatumRodjenja;
+
+	@FindBy(css = "[ng-model=\"year\"]")
+	WebElement yearDatumRodjenja;
+
+	@FindBy(css = "[ng-model=\"registration.promo\"]")
+	WebElement promoCheckbox;
+
+	@FindBy(css = ".sv-form-header h4")
+	WebElement titleElement;
+
+	@FindBy(css = "[ng-model=\"registration.info\"]")
+	WebElement infoCheckbox;
+
+	@FindBy(css = "[ng-model=\"registration.telefon\"]")
+	WebElement fieldTelefon;
+
+	@FindBy(css = "[ng-model=\"registration.username\"]")
+	WebElement fieldUsernameRegistration;
+
+	@FindBy(css = "[ng-model=\"registration.lozinka\"]")
+	WebElement fieldPasswordRegistration;
+
+	@FindBy(css = "[ng-click=\"register()\"]")
+	WebElement buttonRegistracija;
+
+	@FindBy(className = "bg-danger")
+	WebElement titleMolimoVasSacekajte;
+
+	public LoginPageClass_VozSrb(WebDriver driver) {
+		this.driver = driver;
+		PageFactory.initElements(driver, this);
+		wait = new WebDriverWait(driver, Duration.ofSeconds(15));
+	}
+
+	// metode
+	public void enterFirstName(String firstName) {
+		wait.until(ExpectedConditions.visibilityOf(inputFieldFirstname)).sendKeys(firstName);
+	}
+
+	public void enterLastName(String lastName) {
+		wait.until(ExpectedConditions.visibilityOf(inputFieldLastName)).sendKeys(lastName);
+	}
+
+	public void pickBirthdate(String day, String month, String year) {
+		wait.until(ExpectedConditions.visibilityOf(dayDatumRodjena));
+		wait.until(ExpectedConditions.visibilityOf(monthDatumRodjenja));
+		wait.until(ExpectedConditions.visibilityOf(yearDatumRodjenja));
+
+		Select dropdownDays = new Select(dayDatumRodjena);
+		Select dropdownMonth = new Select(monthDatumRodjenja);
+		Select dropdownYear = new Select(yearDatumRodjenja);
+
+		dropdownDays.selectByValue(day);
+		dropdownMonth.selectByValue(month);
+		dropdownYear.selectByValue(year);
+	}
+
+	public void clickUnosTelefona(String telefon) {
+		wait.until(ExpectedConditions.visibilityOf(fieldTelefon)).sendKeys(telefon);
+	}
+
+	public void promoCheckboxClick() {
+		wait.until(ExpectedConditions.visibilityOf(promoCheckbox));
+		promoCheckbox.click();
+	}
+
+	public boolean promoCheckboxRead() {
+		return promoCheckbox.isSelected();
+	}
+
+	public String getTitle() {
+		wait.until(ExpectedConditions.visibilityOf(titleElement));
+		return titleElement.getText();
+	}
+
+	public String getTitleMolimoVasSacekajte() {
+		wait.until(ExpectedConditions.visibilityOf(titleMolimoVasSacekajte));
+		return titleMolimoVasSacekajte.getText();
+	}
+
+	public void infoCheckBoxClick() {
+		wait.until(ExpectedConditions.visibilityOf(infoCheckbox));
+		infoCheckbox.click();
+	}
+
+	public boolean infoCheckboxRead() {
+		return infoCheckbox.isSelected();
+	}
+
+	public void enderUsername(String username) {
+		wait.until(ExpectedConditions.visibilityOf(fieldUsernameRegistration)).sendKeys(username);
+	}
+
+	public void enterPassword(String password) {
+		wait.until(ExpectedConditions.visibilityOf(fieldPasswordRegistration)).sendKeys(password);
+	}
+
+	public void clickButtonRegistration() {
+		wait.until(ExpectedConditions.visibilityOf(buttonRegistracija));
+		buttonRegistracija.click();
+	}
+
+}

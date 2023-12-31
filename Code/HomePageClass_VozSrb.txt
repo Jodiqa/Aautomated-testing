@@ -1,0 +1,108 @@
+public class HomePageClass_VozSrb {
+	WebDriver driver;
+	WebDriverWait wait;
+
+	// elementi
+
+	@FindBy(id = "jedanSmer")
+	WebElement buttonJedanSmer;
+
+	@FindBy(id = "povratna")
+	WebElement buttonPovratna;
+
+	@FindBy(id = "stanicaod")
+	WebElement fieldPolazneStanice;
+
+	@FindBy(id = "stanicado")
+	WebElement fieldStanicaDo;
+
+	@FindBy(css = "[ng-click=\"open()\"]")
+	WebElement ikonicaKalendar;
+
+	@FindBy(css = "[ng-click=\"move(1)\"]")
+	WebElement strelicaDesnaNaKalendaru;
+
+	@FindBy(css = ".btn.btn-default.btn-sm.active")
+	WebElement aktivanDatum;
+
+	@FindBy(id = "btntrazi")
+	WebElement buttonTrazi;
+
+	//znam da nije elegantno ali nisam uspreo na drugaciji nacin da dodjem do selektora
+	@FindBy(xpath = "//*[@id=\"main\"]/div/div[1]/div/ng-view/div/div/div[3]/div[3]/table/tbody/tr[2]/td[6]/div[1]") 
+	WebElement buttonIzaberi;
+	
+    // https://www.w3schools.com/cssref/css_selectors.php 
+	// [attribute^=value]	
+	// a[href^="https"] Selects every <a> element whose href attribute value begins with "https"
+	@FindBy(css = "[ng-click^=\"zapamtiPodatke\"]")
+	WebElement buttonDalje;
+
+	public HomePageClass_VozSrb(WebDriver driver) {
+		this.driver = driver;
+		PageFactory.initElements(driver, this);
+		wait = new WebDriverWait(driver, Duration.ofSeconds(15));
+	}
+
+	// metode
+	public void clickButtonJedanSmer() {
+		buttonJedanSmer.click();
+	}
+
+	public void clickButtonPovratna() {
+		buttonPovratna.click();
+	}
+	public void pickPolaznuStanicu(String prefix, String stanica) {
+		wait.until(ExpectedConditions.visibilityOf(fieldPolazneStanice)).sendKeys(stanica);
+		driver.findElement(By.cssSelector("ul>li>a[title=\""+ stanica + "\"]")).click();
+	}
+
+	public void pickDoStanicu(String prefix, String stanicaDo) {
+		wait.until(ExpectedConditions.visibilityOf(fieldStanicaDo)).sendKeys(stanicaDo);
+		driver.findElement(By.cssSelector("ul>li>a[title=\""+ stanicaDo + "\"]")).click();
+	}
+
+	public void clickIkonicaKalendar() {
+		wait.until(ExpectedConditions.visibilityOf(ikonicaKalendar)).click();
+	}
+
+	public void clickNaDesnuStrelicuNaKalendaru() {
+		wait.until(ExpectedConditions.visibilityOf(ikonicaKalendar)).click();
+		strelicaDesnaNaKalendaru.click();
+	}
+
+	public void clickNaAktivanDatum() {
+		// wait.until(ExpectedConditions.visibilityOf(ikonicaKalendar)).click();
+		// strelicaDesnaNaKalendaru.click();
+		// wait.until(ExpectedConditions.visibilityOf(aktivanDatum)).click();
+		clickNaDesnuStrelicuNaKalendaru();
+		wait.until(ExpectedConditions.elementToBeClickable(aktivanDatum)).click();
+		// aktivanDatum.click();
+	}
+
+	public void clickButtonTrazi() {
+		buttonTrazi.click();
+	}
+
+	public void clickButtonIzaberi() {
+		clickButtonTrazi();
+		wait.until(ExpectedConditions.visibilityOf(buttonIzaberi)).click();
+	}
+
+	public void clickButtonDalje() {
+		clickButtonIzaberi();
+		wait.until(ExpectedConditions.visibilityOf(buttonDalje)).click();
+	}
+	public String brojPutnikaVerifikacija() {
+		//morao sam urlContains je prelazi na drugi url a ne na drugi window
+		wait.until(ExpectedConditions.urlContains("https://webapi1.srbvoz.rs/ekarta/app/#!/putnici"));
+		
+		//u pocetku sam imao problema, nekad mi je prolazio test nekad nije
+		//kada sam dodao visibilityOfElemen problem resen
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("h4.ng-binding")));
+		
+		WebElement brojPutnikaElement =  wait.until(ExpectedConditions.visibilityOf(driver.findElement(By.cssSelector("h4.ng-binding"))));
+		
+		return brojPutnikaElement.getText();
+	}
+}

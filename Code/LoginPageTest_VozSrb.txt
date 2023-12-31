@@ -1,0 +1,37 @@
+public class LoginPageTest_VozSrb extends BaseTest_VozSrb {
+
+	@BeforeTest
+	public void navigacija() {
+		driver.navigate().to("https://webapi1.srbvoz.rs/ekarta/app/#!/login");
+	}
+
+	@Test(priority = 1)
+	public void verifikacijaPodnaslova() {
+		assertEquals(loginPage.getTitle(), "PRIJAVA NA SISTEM ILI REGISTRACIJA");
+	}
+
+	@Test(priority = 2)
+	public void registracica() {
+		loginPage.enterFirstName("Aleksandar");
+		loginPage.enterLastName("Cvetanovic");
+		loginPage.pickBirthdate("number:14", "number:3", "number:1987");
+		loginPage.clickUnosTelefona("0621973241");
+		loginPage.enderUsername("sgsgsgfdf"); 
+		loginPage.enterPassword("1234567");
+		// loginPage.promoCheckboxClick();
+		// loginPage.infoCheckBoxClick();
+		loginPage.clickButtonRegistration();
+		assertEquals(loginPage.getTitleMolimoVasSacekajte(), "Molimo Vas sačekajte.");
+	}
+
+	@Test(priority = 2)
+	public void verifiedCheckbox() {
+		loginPage.promoCheckboxClick();
+		loginPage.promoCheckboxRead();
+		assertFalse(loginPage.infoCheckboxRead());
+		
+		loginPage.infoCheckBoxClick();
+		loginPage.infoCheckboxRead();
+		assertTrue(loginPage.infoCheckboxRead());
+	}
+}
